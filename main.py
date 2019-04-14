@@ -313,6 +313,23 @@ def check_restrictions(job):
         return False
 
 
+def check_continue():
+    global mission_vector
+    global success_vector
+    global target_vector
+    if check_restrictions(current_job):
+        calculate_weapon_modifiers(current_job)
+        for weapon in weapons_to_sell:
+            mission_vector += weapon.parameters
+        success_vector = mission_vector - target_vector
+        print("Success vector: ", success_vector)
+        print("Mission vector: ", mission_vector)
+        return True
+    else:
+        print("Mission failed. We'll get em\' next time.")
+        return False
+
+
 # Inventory
 def pick_weapons():
     while True:
@@ -320,9 +337,10 @@ def pick_weapons():
 
         # Pick a weapon to add
         print_weapon_list()
-        print("Pick a weapon to sell using the ID above each weapon.")
+        print("Pick a weapon to sell using the ID above each weapon. (Enter -1 to not pick a weapon)")
         weapon_id = input("Enter ID: ")
-        weapons_to_sell.append(all_weapons.pop(weapon_id))
+        if weapon_id != -1:
+            weapons_to_sell.append(all_weapons.pop(weapon_id))
         print("-------------------------------------------")
 
         # Add more?
@@ -331,7 +349,7 @@ def pick_weapons():
             continue
 
         # Edit inventory?
-        edit_input = raw_input("Would you like to edit your inventory? [Y/N")
+        edit_input = raw_input("Would you like to edit your inventory? [Y/N]")
         if edit_input in ["Y", "y", "Yes", "yes", "YES"]:
             edit_inventory()
 
@@ -371,19 +389,24 @@ if __name__ == "__main__":
 
     print("Please supply the client with the appropriate weapons.")
 
-    pick_weapons()
+    # Core game loop: pick weapons -> check if restrictions are met -> if so, calculate / if not, re-pick
+    while True:
+        pick_weapons()
+        print("-------------------------------------------")
+        print("SELECTED WEAPONS:")
+        print_sell_list()
+        if check_continue():
+            # Calculate success
+            break
+        else:
+            # Give choice to abandon job.
+            print("-------------------------------------------")
+            if input("Abandon job?[Y/N]") in ["Y", "y", "Yes", "yes", "YES"]:
+                exit(0)
+            # Go back to picking weapons
+            else:
+                continue
 
-    # Do calculations #
-    if check_restrictions(current_job):
-        calculate_weapon_modifiers(current_job)
-        for weapon in weapons_to_sell:
-            mission_vector += weapon.parameters
-        success_vector = mission_vector - target_vector
-        print(success_vector)
-        print(mission_vector)
-        print("Mission complete.")
-    else:
-        print("Mission failed. We'll get em\' next time.")
 
 
 
