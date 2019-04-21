@@ -40,7 +40,19 @@ def skewRandGen (x1, x2, x3, x4, x5):
     result = np.random.choice(r, 1, p=x)/100 + 1
     return float(result)
 
+big_count = 0
+small_count = 0
+
 # a test script here
-test = skewRandGen(1, 100, 1, 50, 100)
-print(f"The result is {test}")
+for i in range(100):
+    test = skewRandGen(500, 100, 20, 10, 5)
+    print(f"The result is {test}")
+    if test > 1.5:
+        big_count+=1
+    else:
+        small_count+=1
+
+print("big: " + str(big_count))
+print("small: " + str(small_count))
+
 
