@@ -317,6 +317,19 @@ def print_sell_list():
         print("\n")
 
 
+def print_parameter_status(job):
+    print("Current Status: ")
+    print("--Restrictions--")
+    print("Volume: " + str(sum([w.volume for w in weapons_to_sell])) + "/" + str(job.restrictions[0]))
+    print("Weapon Types: " + ", ".join([w.type for w in weapons_to_sell]))
+    print("Budget: " + str(sum([w.cost for w in weapons_to_sell])) + "/" + str(job.restrictions[2]))
+    print("--Parameters--")
+    print("Weight: " + str(sum([w.parameters[3] for w in weapons_to_sell])) + "/" + str(target_vector[3]))
+    print("Lethality: " + str(sum([w.parameters[0] for w in weapons_to_sell])) + "/" + str(target_vector[0]))
+    print("Stealth: " + str(sum([w.parameters[1] for w in weapons_to_sell])) + "/" + str(target_vector[1]))
+    print("Range: " + str(max([w.parameters[2] for w in weapons_to_sell])) + "/" + str(target_vector[2]))
+
+
 # Calculations
 def calculate_weapon_modifiers(job):
     if not job.percentage_modifiers:
@@ -383,19 +396,21 @@ def pick_weapons():
         if weapon_id != -1:
             weapons_to_sell.append(all_weapons.pop(weapon_id))
         print("-------------------------------------------")
+        print_parameter_status(current_job)
+        print("-------------------------------------------")
 
         # Add more?
-        add_more = str(input("Would you like to add more weapons? [Y/N]"))
+        add_more = input("Would you like to add more weapons? [Y/N]")
         if add_more in ["Y", "y", "Yes", "yes", "YES"]:
             continue
 
         # Edit inventory?
-        edit_input = str(("Would you like to edit your inventory? [Y/N]"))
+        edit_input = input("Would you like to edit your inventory? [Y/N]")
         if edit_input in ["Y", "y", "Yes", "yes", "YES"]:
             edit_inventory()
 
         # Finalize?
-        finish = str(("Finalize your choices? [Y/N]"))
+        finish = input("Finalize your choices? [Y/N]")
         if finish in ["Y", "y", "Yes", "yes", "YES"]:
             return
 
