@@ -181,7 +181,6 @@ class Weapon:
 mission_vector = numpy.array([0.0, 0.0, 0.0, 0.0])
 target_vector = numpy.array([0.0, 0.0, 0.0, 0.0])
 success_vector = numpy.array([0.0, 0.0, 0.0, 0.0])
-success_range = numpy.array([])
 success_luck = None
 
 # Jobs & Clients
@@ -253,7 +252,7 @@ weapons = OrderedDict({
         'Type': 'pistol',
         'Volume': 1,
         'Cost': 455,
-        'Parameters': numpy.array([8, 1, 2, 0.59]),  # [Lethality, Stealth, Range, Weight]
+        'Parameters': numpy.array([6, 1, 2, 0.59]),  # [Lethality, Stealth, Range, Weight]
         'Flavor_Text': 'No modern pistol is more iconic than the Glock. Smart, effective, and lethal, the Glock is a '
                        'go to weapon for any mercenary.'
     },
@@ -262,7 +261,7 @@ weapons = OrderedDict({
         'Type': 'pistol',
         'Volume': 0.8,
         'Cost': 915,
-        'Parameters': numpy.array([7, 2, 2, 0.65]),  # [Lethality, Stealth, Range, Weight]
+        'Parameters': numpy.array([9, 2, 2, 0.65]),  # [Lethality, Stealth, Range, Weight]
         'Flavor_Text': 'Chambered in .40 S&W, the P30 packs peak German efficiency into a deadly pistol.'
     },
     3: {
@@ -411,6 +410,7 @@ def pick_weapons():
 
         # Finalize?
         finish = input("Finalize your choices? [Y/N]")
+        print(type(finish))
         if finish in ["Y", "y", "Yes", "yes", "YES"]:
             return
 
@@ -453,6 +453,15 @@ if __name__ == "__main__":
         print_sell_list()
         if check_continue():
             # Calculate success from here
+            success_luck = skew_random_gen(500, 100, 20, 10, 5)
+            # [ high, low ]
+            lethality_success_range = numpy.array([target_vector[0] * success_luck, target_vector[0] -
+                                            ((target_vector[0] * success_luck) - target_vector[0])])
+            stealth_success_rate = numpy.array([target_vector[1] * success_luck, target_vector[1] -
+                                            ((target_vector[1] * success_luck) - target_vector[1])])
+            print("lethality ", lethality_success_range)
+            print("stealth ", stealth_success_rate)
+            print("luck: " + str(success_luck))
             break
         else:
             # Give choice to abandon job.
