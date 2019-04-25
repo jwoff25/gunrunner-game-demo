@@ -452,7 +452,7 @@ if __name__ == "__main__":
         print("SELECTED WEAPONS:")
         print_sell_list()
         if check_continue():
-            # Calculate success
+            # Calculate success from here
             break
         else:
             # Give choice to abandon job.
