@@ -454,14 +454,32 @@ if __name__ == "__main__":
         if check_continue():
             # Calculate success from here
             success_luck = skew_random_gen(500, 100, 20, 10, 5)
-            # [ high, low ]
-            lethality_success_range = numpy.array([target_vector[0] * success_luck, target_vector[0] -
-                                            ((target_vector[0] * success_luck) - target_vector[0])])
-            stealth_success_rate = numpy.array([target_vector[1] * success_luck, target_vector[1] -
-                                            ((target_vector[1] * success_luck) - target_vector[1])])
+            # [ low, high ]
+            lethality_success_range = numpy.array([target_vector[0] -
+                                                   ((target_vector[0] * success_luck) - target_vector[0]),
+                                                   target_vector[0] * success_luck])
+            stealth_success_range = numpy.array([target_vector[1] -
+                                                ((target_vector[1] * success_luck) - target_vector[1]),
+                                                target_vector[1] * success_luck])
+            range_success_range = numpy.array([target_vector[2] -
+                                                ((target_vector[2] * success_luck) - target_vector[2]),
+                                                target_vector[2] * success_luck]) # make this one more strict
             print("lethality ", lethality_success_range)
-            print("stealth ", stealth_success_rate)
+            print("stealth ", stealth_success_range)
             print("luck: " + str(success_luck))
+            # check for lethality
+            lethality_val = success_vector[0]
+            stealth_val = success_vector[1]
+            range_val = success_vector[2]
+            weight_val = success_vector[3]
+            if lethality_success_range[0] <= lethality_val <= lethality_success_range[1]:
+                print("lethality success")
+            if stealth_success_range[0] <= stealth_val <= stealth_success_range[1]:
+                print("stealth success")
+            if range_success_range[0] <= range <= range_success_range[1]:
+                print("range success")
+            if weight_val < target_vector[4]:
+                print("weight success")
             break
         else:
             # Give choice to abandon job.

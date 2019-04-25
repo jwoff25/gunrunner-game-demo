@@ -42,17 +42,25 @@ def skewRandGen (x1, x2, x3, x4, x5):
 
 big_count = 0
 small_count = 0
+kinda_big = 0
+kinda_small = 0
 
 # a test script here
 for i in range(100):
-    test = skewRandGen(500, 100, 20, 10, 5)
+    test = skewRandGen(500, 75, 20, 10, 5)
     print(f"The result is {test}")
-    if test > 1.5:
+    if test > 1.75:
         big_count+=1
+    elif test > 1.5:
+        kinda_big+=1
+    elif test > 1.25:
+        kinda_small+=1
     else:
         small_count+=1
 
 print("big: " + str(big_count))
+print("kinda big: " + str(kinda_big))
+print("kinda small: " + str(kinda_small))
 print("small: " + str(small_count))
 
 
