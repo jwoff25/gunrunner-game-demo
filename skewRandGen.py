@@ -47,7 +47,7 @@ kinda_small = 0
 
 # a test script here
 for i in range(100):
-    test = skewRandGen(500, 75, 20, 10, 5)
+    test = skewRandGen(900, 75, 20, 10, 5)
     print(f"The result is {test}")
     if test > 1.75:
         big_count+=1

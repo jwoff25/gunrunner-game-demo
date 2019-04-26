@@ -188,7 +188,7 @@ jobs = OrderedDict({
     0: {
         'Title': 'Armstrong',
         'Desc': 'An old friend is back in town. That friend needs to be killed. Quiety.',
-        'Restrictions': [7, ['pistol', 'knife'], 700],  # [Volume, [WeaponType/s], Budget]
+        'Restrictions': [7, ['pistol', 'knife'], 2000],  # [Volume, [WeaponType/s], Budget]
         'Parameters': numpy.array([10, 5, 2, 2]),  # [Lethality, Stealth, Range, Weight]
         'Stats': {
             'text': ['Pistol Efficiency: +5% Lethality for Pistols', 'Trained Assassin: +2 Stealth',
@@ -453,7 +453,7 @@ if __name__ == "__main__":
         print_sell_list()
         if check_continue():
             # Calculate success from here
-            success_luck = skew_random_gen(500, 100, 20, 10, 5)
+            success_luck = skew_random_gen(900, 100, 20, 10, 5)
             # [ low, high ]
             lethality_success_range = numpy.array([target_vector[0] -
                                                    ((target_vector[0] * success_luck) - target_vector[0]),
@@ -463,23 +463,44 @@ if __name__ == "__main__":
                                                 target_vector[1] * success_luck])
             range_success_range = numpy.array([target_vector[2] -
                                                 ((target_vector[2] * success_luck) - target_vector[2]),
-                                                target_vector[2] * success_luck]) # make this one more strict
+                                                target_vector[2] * success_luck])  # make this one more strict
             print("lethality ", lethality_success_range)
             print("stealth ", stealth_success_range)
             print("luck: " + str(success_luck))
             # check for lethality
-            lethality_val = success_vector[0]
-            stealth_val = success_vector[1]
-            range_val = success_vector[2]
-            weight_val = success_vector[3]
+            lethality_val = mission_vector[0]  # success vector?
+            stealth_val = mission_vector[1]
+            range_val = mission_vector[2]
+            weight_val = mission_vector[3]
+            # if weight is less, then ok - if weight is greater, than decrease lethality
+            if weight_val < target_vector[3]:
+                print("weight success")
+            else:
+                # penalty time
+                print("weight fail")
+                # decrease lethality by overkill * some percentage value or something i dunno
+                lethality_val = lethality_val - ((lethality_val * (lethality_val/target_vector[3] - 1))
+                                                 * (lethality_val - target_vector[3]))
+            # check lethality
+            print(lethality_val)
+            print(stealth_val)
             if lethality_success_range[0] <= lethality_val <= lethality_success_range[1]:
                 print("lethality success")
+            elif lethality_val > lethality_success_range[1]:
+                print("lethality great success")
+            else:
+                print("lethality fail")
+            # check stealth
+            print("aaaaah")
             if stealth_success_range[0] <= stealth_val <= stealth_success_range[1]:
                 print("stealth success")
-            if range_success_range[0] <= range <= range_success_range[1]:
+            elif stealth_val > stealth_success_range[1]:
+                print("stealth great success")
+            else:
+                print("stealth fail")
+            # check range
+            if range_success_range[0] <= range_val <= range_success_range[1]:
                 print("range success")
-            if weight_val < target_vector[4]:
-                print("weight success")
             break
         else:
             # Give choice to abandon job.
