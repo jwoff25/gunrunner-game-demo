@@ -182,6 +182,7 @@ mission_vector = numpy.array([0.0, 0.0, 0.0, 0.0])
 target_vector = numpy.array([0.0, 0.0, 0.0, 0.0])
 success_vector = numpy.array([0.0, 0.0, 0.0, 0.0])
 success_luck = None
+SUCCESS_TARGET_VAL = 3
 
 # Jobs & Clients
 jobs = OrderedDict({
@@ -452,9 +453,16 @@ if __name__ == "__main__":
         print("SELECTED WEAPONS:")
         print_sell_list()
         if check_continue():
+            LETHALITY_SUCCESS_VAL = 0
+            STEALTH_SUCCESS_VAL = 0
+            RANGE_SUCCESS_VAL = 0
+            print("---- CALCULATING SUCCESS ----")
+            print("LETHALITY TARGET: " + str(target_vector[0]))
+            print("STEALTH TARGET: " + str(target_vector[1]))
+            print("-------------------------------------------")
             # Calculate success from here
             success_luck = skew_random_gen(900, 100, 20, 10, 5)
-            # [ low, high ]
+            # -- GENERATE RANGES FOR ALL PARAMETERS [ low, high ] --
             lethality_success_range = numpy.array([target_vector[0] -
                                                    ((target_vector[0] * success_luck) - target_vector[0]),
                                                    target_vector[0] * success_luck])
@@ -467,40 +475,52 @@ if __name__ == "__main__":
             print("lethality ", lethality_success_range)
             print("stealth ", stealth_success_range)
             print("luck: " + str(success_luck))
-            # check for lethality
-            lethality_val = mission_vector[0]  # success vector?
+            print("-------------------------------------------")
+            # -- CREATE VARIABLES FOR PLAYER ACHIEVED PARAMETERS --
+            lethality_val = mission_vector[0]
             stealth_val = mission_vector[1]
             range_val = mission_vector[2]
             weight_val = mission_vector[3]
-            # if weight is less, then ok - if weight is greater, than decrease lethality
+            # -- DETERMINE SUCCESS FOR WEIGHT --
+            # if weight is less, then ok - if weight is greater, than decrease stealth
             if weight_val < target_vector[3]:
                 print("weight success")
             else:
                 # penalty time
                 print("weight fail")
                 # decrease lethality by overkill * some percentage value or something i dunno
-                lethality_val = lethality_val - ((lethality_val * (lethality_val/target_vector[3] - 1))
-                                                 * (lethality_val - target_vector[3]))
-            # check lethality
-            print(lethality_val)
-            print(stealth_val)
+                stealth_val = stealth_val - ((stealth_val * (stealth_val / target_vector[3] - 1))
+                                                 * (stealth_val - target_vector[3]))
+            print("current lethality: " + str(lethality_val))
+            print("current stealth: " + str(stealth_val))
+            print("-------------------------------------------")
+            # -- DETERMINE SUCCESS FOR LETHALITY --
             if lethality_success_range[0] <= lethality_val <= lethality_success_range[1]:
                 print("lethality success")
+                LETHALITY_SUCCESS_VAL = 1
             elif lethality_val > lethality_success_range[1]:
                 print("lethality great success")
+                LETHALITY_SUCCESS_VAL = 1.5
             else:
                 print("lethality fail")
-            # check stealth
-            print("aaaaah")
+                # -- DETERMINE SUCCESS FOR STEALTH --
             if stealth_success_range[0] <= stealth_val <= stealth_success_range[1]:
                 print("stealth success")
+                STEALTH_SUCCESS_VAL = 1
             elif stealth_val > stealth_success_range[1]:
                 print("stealth great success")
+                STEALTH_SUCCESS_VAL = 1.5
             else:
                 print("stealth fail")
-            # check range
+            # -- DETERMINE SUCCESS FOR RANGE --
             if range_success_range[0] <= range_val <= range_success_range[1]:
                 print("range success")
+                RANGE_SUCCESS_VAL = 1
+            else:
+                print("range fail")
+            # -- DETERMINE SUCCESS PERCENTAGE --
+            SUCCESS_PERCENTAGE = (RANGE_SUCCESS_VAL + LETHALITY_SUCCESS_VAL + STEALTH_SUCCESS_VAL) / SUCCESS_TARGET_VAL
+            print(SUCCESS_PERCENTAGE)
             break
         else:
             # Give choice to abandon job.
