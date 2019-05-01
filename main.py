@@ -1,6 +1,35 @@
 import numpy
-import random
 from collections import OrderedDict
+
+########################################################
+################ Final Judge Coin Flip #################
+########################################################
+# ------------------------------------------------------#
+# @author: Yong Chul Yoon
+#
+# This function takes in a real number < 1. This number is
+# the success rate determined by the ratio of mission vector and
+# target mission vector. If p > = 1, then you automatically succeed.
+# If p < 1, you toss a biased coin which is simulated with binomial
+# distribution. If the coin is head (1), then you succeed in mission,
+# and if the coin is tail (0), you fail the mission.
+# -------------------------------------------------------#
+##########################################################
+
+
+def judge(p):
+    if p >= 1:  # you already succeeded
+        print('Mission success!!! You get a bonus!')
+        print('Your Estimated Success Rate: ' + str(p * 100) + ' %')
+    else:  # if not succeeded, flip a biased coin
+        x = numpy.random.binomial(1, p)
+        if x == 1:  # heads, you succeed. Luck you if you had low chance!
+            print('Mission Success!')
+            print('Your Estimated Success Rate: ' + str(p * 100) + ' %')
+        else:  # tails, you fail...
+            print('Fail...')
+            print('Your Estimated Success Rate: ' + str(p * 100) + ' %')
+
 
 ########################################################
 ########### Skewed Random Number Generator #############
@@ -503,7 +532,7 @@ if __name__ == "__main__":
                 LETHALITY_SUCCESS_VAL = 1.5
             else:
                 print("lethality fail")
-                # -- DETERMINE SUCCESS FOR STEALTH --
+            # -- DETERMINE SUCCESS FOR STEALTH --
             if stealth_success_range[0] <= stealth_val <= stealth_success_range[1]:
                 print("stealth success")
                 STEALTH_SUCCESS_VAL = 1
@@ -520,7 +549,8 @@ if __name__ == "__main__":
                 print("range fail")
             # -- DETERMINE SUCCESS PERCENTAGE --
             SUCCESS_PERCENTAGE = (RANGE_SUCCESS_VAL + LETHALITY_SUCCESS_VAL + STEALTH_SUCCESS_VAL) / SUCCESS_TARGET_VAL
-            print(SUCCESS_PERCENTAGE)
+            # -- JUDGE -- #
+            judge(SUCCESS_PERCENTAGE)
             break
         else:
             # Give choice to abandon job.
