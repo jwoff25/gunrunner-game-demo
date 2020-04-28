@@ -20,17 +20,18 @@
 # import numpy module
 import numpy as np
 
+
 # begin function
 def skewRandGen (x1, x2, x3, x4, x5):
     # Generate a random number between 0 and 100 
     # with step size of 1
-    r = np.arange(0,100,1)
+    r = np.arange(0,50,1)
     
     # Define probability interval for 100 numbers. 
     # x1 = 0~19; x2 = 20~39; x3 = 40~59; x4 = 60~79; x5 = 80~100
-    x = ( [x1] * 20 + [x2] * 20 
-    + [x3] * 20 + [x4] * 20 
-    + [x5] * 20 )
+    x = ( [x1] * 10 + [x2] * 10
+    + [x3] * 10 + [x4] * 10
+    + [x5] * 10 )
     
     # Normalize the probability to 1.0 
     x /= np.sum(x)
@@ -47,7 +48,7 @@ kinda_small = 0
 
 # a test script here
 for i in range(100):
-    test = skewRandGen(900, 75, 20, 10, 5)
+    test = skewRandGen(900, 70, 20, 10, 5)
     print(f"The result is {test}")
     if test > 1.75:
         big_count+=1

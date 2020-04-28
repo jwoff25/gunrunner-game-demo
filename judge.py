@@ -20,13 +20,25 @@ def judge(p):
         print('Mission success!!! You get a bonus!')
         print('Your Estimated Success Rate: '+str(p*100) + ' %')
     else : # if not succeeded, flip a biased coin
-        x  = np.random.binomial(1,p)
+        x = np.random.binomial(1,p)
         if x == 1 : # heads, you succeed. Luck you if you had low chance!
             print('Mission Success!')
             print('Your Estimated Success Rate: '+str(p*100) + ' %')
+            return "success"
         else : # tails, you fail...
             print('Fail...')
             print('Your Estimated Success Rate: '+str(p*100) + ' %')
+            return "fail"
 # test
-judge(0.3)
+fail = 0
+suc = 0
+for i in range(100):
+    if judge(0.3) in "success":
+        suc+=1
+    else:
+        fail+=1
+
+print("suc: " + str(suc))
+print("fail: " + str(fail))
+print(suc/100)
 

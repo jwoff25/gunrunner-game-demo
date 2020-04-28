@@ -22,13 +22,12 @@ def judge(p):
         print('Mission success!!! You get a bonus!')
         print('Your Estimated Success Rate: ' + str(p * 100) + ' %')
     else:  # if not succeeded, flip a biased coin
+        print('Your Estimated Success Rate: ' + str(p * 100) + ' %')
         x = numpy.random.binomial(1, p)
         if x == 1:  # heads, you succeed. Luck you if you had low chance!
             print('Mission Success!')
-            print('Your Estimated Success Rate: ' + str(p * 100) + ' %')
         else:  # tails, you fail...
             print('Fail...')
-            print('Your Estimated Success Rate: ' + str(p * 100) + ' %')
 
 
 ########################################################
@@ -241,7 +240,7 @@ jobs = OrderedDict({
 
 clients = OrderedDict({
     0: {
-        'Name': 'Y O N C E',
+        'Name': 'Y',
         'Age': 'unknown',
         'Occupation': 'Singer',
         'Stats': {
@@ -249,8 +248,8 @@ clients = OrderedDict({
             'percentage_modifiers': {'pistol': 0.05},
             'flat_modifiers': {2: 2}
         },
-        'Bio': 'Y O N C E is an immortal singer/songwriter from the world famous band SUCHMOS. After sacrificing his '
-               'old band-mates in 2020 and drinking their blood, he gained eternal life and youth. Y O N C E normally '
+        'Bio': 'Y is an immortal singer/songwriter from the world famous band REDACTED. After sacrificing his '
+               'old band-mates in 2020 and drinking their blood, he gained eternal life and youth. Y normally '
                'spends his days staring at mirrors and writing new songs, but rumours are that an old band mate '
                'survived the ritual and is back to take revenge on him.'
     },
